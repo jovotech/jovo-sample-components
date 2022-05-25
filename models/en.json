@@ -2,6 +2,9 @@
   "invocation": "my test app",
   "version": "4.0",
   "intents": {
+    "HelloIntent": {
+      "phrases": ["hi", "hello", "hey"]
+    },
     "ReserveTableIntent": {
       "phrases": [
         "reserve a table",
@@ -11,8 +14,16 @@
         "I want to book a table"
       ]
     },
-    "ExampleIntent": {
-      "phrases": ["example", "show me an example"]
+    "SeatingTypeIntent": {
+      "phrases": ["{seatingType} table", "{seatingType} seating", "{seatingType}"],
+      "entities": {
+        "seatingType": {
+          "type": "SeatingType"
+        }
+      }
+    },
+    "OrderIntent": {
+      "phrases": ["order", "order something"]
     },
     "HelpIntent": {
       "phrases": ["what can I do", "help"]
@@ -22,6 +33,11 @@
     },
     "NoIntent": {
       "phrases": ["no", "no thanks"]
+    }
+  },
+  "entityTypes": {
+    "SeatingType": {
+      "values": ["inside", "outside"]
     }
   }
 }

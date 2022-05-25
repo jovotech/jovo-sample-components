@@ -3,17 +3,30 @@ import { Component, BaseComponent, Intents } from '@jovotech/framework';
 @Component({})
 export class CollectTableDataComponent extends BaseComponent {
   START() {
-    // return this.$send('For how many people?');
-    return this.$send('Do you really want to book a table?');
+    this.$component.data.unhandledCounter = 0;
+
+    return this.$send({
+      message: 'Do you prefer inside or outside seating?',
+      quickReplies: ['inside', 'outside'],
+    });
   }
 
-  @Intents(['YesIntent'])
-  yes() {
-    return this.$resolve('success');
+  @Intents(['SeatingTypeIntent'])
+  collectSeatingType() {
+    return this.$resolve('success', this.$entities.seatingType?.resolved);
   }
 
-  @Intents(['NoIntent'])
-  no() {
-    return this.$resolve('dismiss');
+  @Intents(['HelpIntent'])
+  UNHANDLED() {
+    this.$component.data.unhandledCounter++;
+
+    if (this.$component.data.unhandledCounter < 2) {
+      return this.$send({
+        message: 'You can choose either inside or outside seating:',
+        quickReplies: ['inside', 'outside'],
+      });
+    } else {
+      return this.$resolve('dismiss');
+    }
   }
 }

@@ -11,16 +11,23 @@ export class TableReservationComponent extends BaseComponent {
   @Intents([{ name: 'ReserveTableIntent', global: true }])
   START() {
     this.$send('Sure, I can help you book a table.');
+    return this.collectData();
+  }
+
+  collectData() {
     return this.$delegate(CollectTableDataComponent, {
       resolve: {
-        success: this.confirm,
-        dismiss: this.dismiss,
+        success: this.confirm, // The handler that gets called if 'success' is resolved
+        dismiss: this.dismiss, // The handler that gets called if 'dismiss' is resolved
       },
     });
   }
 
-  confirm() {
-    return this.$send('Great!');
+  confirm(seatingType: string) {
+    return this.$send({
+      message: `Great! We're going to reserve a table for ${seatingType} seating.`,
+      listen: false, // close session
+    });
   }
 
   dismiss() {
