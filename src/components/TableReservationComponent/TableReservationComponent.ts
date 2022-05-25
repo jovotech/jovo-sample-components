@@ -49,8 +49,11 @@ export class TableReservationComponent extends BaseComponent {
     });
   }
 
+  /*
+    This handler can be used to react to the final confirmation
+  */
   @Intents(['YesIntent'])
-  confirm() {
+  confirmReservation() {
     return this.$send({
       message: `Great! We're going to reserve a table for ${this.$component.data.seatingType} seating.`,
       listen: false, // close session
