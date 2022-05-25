@@ -17,6 +17,14 @@
     "HelpIntent": {
       "phrases": ["what can I do", "help"]
     },
+    "NumberIntent": {
+      "phrases": ["{number}"],
+      "entities": {
+        "number": {
+          "nlpjs": "number"
+        }
+      }
+    },
     "YesIntent": {
       "phrases": ["yes", "yes please", "sure"]
     },
