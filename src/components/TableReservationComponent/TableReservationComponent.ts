@@ -9,8 +9,8 @@ export class TableReservationComponent extends BaseComponent {
     or via a global ReserveTableIntent.
   */
   @Intents([{ name: 'ReserveTableIntent', global: true }])
-  START() {
-    this.$send('Sure, I can help you book a table.');
+  async START() {
+    await this.$send('Sure, I can help you book a table.');
     return this.collectData();
   }
 
@@ -35,13 +35,7 @@ export class TableReservationComponent extends BaseComponent {
       jovo.$entities.seatingType?.resolved === 'outside',
   })
   askForFinalConfirmation(seatingType?: string) {
-    console.log(seatingType);
-
-    if (seatingType) {
-      this.$component.data.seatingType = seatingType;
-    } else {
-      this.$component.data.seatingType = this.$entities.seatingType?.resolved;
-    }
+    this.$component.data.seatingType = seatingType || this.$entities.seatingType?.resolved;
 
     return this.$send({
       message: `Alright! Just to confirm: Should I reserve table ${this.$component.data.seatingType} for you?`,
@@ -64,8 +58,8 @@ export class TableReservationComponent extends BaseComponent {
     This handler is reached either via a 'dismiss' resolve or a NoIntent on final confirmation
   */
   @Intents(['NoIntent'])
-  redirectToOptions() {
-    this.$send('No problem.');
+  async redirectToOptions() {
+    await this.$send('No problem.');
     return this.$redirect(GlobalComponent, 'suggestOptions');
   }
 }

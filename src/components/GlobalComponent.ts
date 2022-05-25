@@ -14,8 +14,8 @@ import { TableReservationComponent } from './TableReservationComponent/TableRese
 @Component()
 export class GlobalComponent extends BaseComponent {
   @Intents(['HelloIntent'])
-  LAUNCH() {
-    this.$send('Hello there!');
+  async LAUNCH() {
+    await this.$send('Hello there!');
     return this.suggestOptions();
   }
 
@@ -34,13 +34,13 @@ export class GlobalComponent extends BaseComponent {
     This handler shows how a component can redirect to another component.
   */
   @Intents(['OrderIntent'])
-  example() {
-    this.$send(`We don't support this feature yet, but I can help you book a table!`);
+  async redirectToReservation() {
+    await this.$send(`We don't support this feature yet, but I can help you book a table!`);
     return this.$redirect(TableReservationComponent, 'collectData');
   }
 
-  UNHANDLED() {
-    this.$send(`Apologies, I couldn't process your last message.`);
+  async UNHANDLED() {
+    await this.$send(`Apologies, I couldn't process your last message.`);
     return this.suggestOptions();
   }
 }

@@ -20,13 +20,13 @@ export class CollectTableDataComponent extends BaseComponent {
   UNHANDLED() {
     this.$component.data.unhandledCounter++;
 
-    if (this.$component.data.unhandledCounter < 2) {
-      return this.$send({
-        message: 'You can choose either inside or outside seating:',
-        quickReplies: ['inside', 'outside'],
-      });
-    } else {
+    if (this.$component.data.unhandledCounter > 1) {
       return this.$resolve('dismiss');
     }
+
+    return this.$send({
+      message: 'You can choose either inside or outside seating:',
+      quickReplies: ['inside', 'outside'],
+    });
   }
 }
