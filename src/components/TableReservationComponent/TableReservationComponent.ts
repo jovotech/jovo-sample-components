@@ -17,20 +17,34 @@ export class TableReservationComponent extends BaseComponent {
   collectData() {
     return this.$delegate(CollectTableDataComponent, {
       resolve: {
-        success: this.confirm, // The handler that gets called if 'success' is resolved
-        dismiss: this.dismiss, // The handler that gets called if 'dismiss' is resolved
+        success: this.askForFinalConfirmation, // The handler that gets called if 'success' is resolved
+        dismiss: this.redirectToOptions, // The handler that gets called if 'dismiss' is resolved
       },
     });
   }
 
-  confirm(seatingType: string) {
+  askForFinalConfirmation(seatingType: string) {
+    this.$component.data.seatingType = seatingType;
+
     return this.$send({
-      message: `Great! We're going to reserve a table for ${seatingType} seating.`,
+      message: `Alright! Just to confirm: Should I reserve table ${seatingType} for you?`,
+      quickReplies: ['yes', 'no'],
+    });
+  }
+
+  @Intents(['YesIntent'])
+  confirm() {
+    return this.$send({
+      message: `Great! We're going to reserve a table for ${this.$component.data.seatingType} seating.`,
       listen: false, // close session
     });
   }
 
-  dismiss() {
+  /*
+    This handler is reached either via a 'dismiss' resolve or a NoIntent on final confirmation
+  */
+  @Intents(['NoIntent'])
+  redirectToOptions() {
     this.$send('No problem.');
     return this.$redirect(GlobalComponent, 'suggestOptions');
   }
