@@ -1,4 +1,4 @@
-import { Component, BaseComponent, Intents } from '@jovotech/framework';
+import { Component, BaseComponent, Intents, Handle, Jovo } from '@jovotech/framework';
 import { GlobalComponent } from '../GlobalComponent';
 import { CollectTableDataComponent } from './CollectTableDataComponent';
 
@@ -23,11 +23,28 @@ export class TableReservationComponent extends BaseComponent {
     });
   }
 
-  askForFinalConfirmation(seatingType: string) {
-    this.$component.data.seatingType = seatingType;
+  /*
+    This handler can either be reached via deep invocation ("reserve a table outside")
+    or via successful data collection ('success' resolve)
+  */
+  @Handle({
+    global: true,
+    intents: ['ReserveTableIntent'],
+    if: (jovo: Jovo) =>
+      jovo.$entities.seatingType?.resolved === 'inside' ||
+      jovo.$entities.seatingType?.resolved === 'outside',
+  })
+  askForFinalConfirmation(seatingType?: string) {
+    console.log(seatingType);
+
+    if (seatingType) {
+      this.$component.data.seatingType = seatingType;
+    } else {
+      this.$component.data.seatingType = this.$entities.seatingType?.resolved;
+    }
 
     return this.$send({
-      message: `Alright! Just to confirm: Should I reserve table ${seatingType} for you?`,
+      message: `Alright! Just to confirm: Should I reserve table ${this.$component.data.seatingType} for you?`,
       quickReplies: ['yes', 'no'],
     });
   }

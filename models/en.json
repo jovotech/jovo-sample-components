@@ -11,8 +11,14 @@
         "book a table",
         "table reservation",
         "I want to reserve a table",
-        "I want to book a table"
-      ]
+        "I want to book a table",
+        "reserve a table {seatingType}"
+      ],
+      "entities": {
+        "seatingType": {
+          "type": "SeatingType"
+        }
+      }
     },
     "SeatingTypeIntent": {
       "phrases": ["{seatingType} table", "{seatingType} seating", "{seatingType}"],
