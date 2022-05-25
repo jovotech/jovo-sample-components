@@ -1,5 +1,5 @@
-import { Component, BaseComponent, Global } from '@jovotech/framework';
-import { LoveHatePizzaComponent } from './LoveHatePizzaComponent';
+import { Component, BaseComponent, Global, Intents } from '@jovotech/framework';
+import { TableReservationComponent } from './TableReservationComponent/TableReservationComponent';
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +14,23 @@ import { LoveHatePizzaComponent } from './LoveHatePizzaComponent';
 @Component()
 export class GlobalComponent extends BaseComponent {
   LAUNCH() {
-    return this.$redirect(LoveHatePizzaComponent);
+    this.$send('Hello there!');
+    return this.suggestOptions();
+  }
+
+  @Intents(['HelpIntent'])
+  suggestOptions() {
+    return this.$send({
+      message: 'I can help you with one of the following tasks:',
+      quickReplies: ['reserve a table' /* ... */],
+    });
+  }
+
+  /*
+    This handler shows how a component can redirect to another component.
+  */
+  @Intents(['ExampleIntent'])
+  example() {
+    return this.$redirect(TableReservationComponent);
   }
 }
